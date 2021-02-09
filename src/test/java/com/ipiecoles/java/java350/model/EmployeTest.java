@@ -47,4 +47,17 @@ public class EmployeTest {
         //Then
         Assertions.assertThat(nbAnneeAnciennete).isNull();
     }
+
+    @ParameterizedTest(name = "La prime pour le matricule {1}, {3} an(s) d'ancienneté, performance de {0} et un taux d'activité de {2} est de {4} euros")
+    @CsvSource({
+            "1, 'T12345', 1.0, 0, 1000.0",
+            "1, 'T12345', 1.0, 5, 1500.0",
+            "1, 'T12345', 0.5, 0, 500.0",
+            "2, 'T12345', 1, 0, 2300.0",
+    })
+    public void testGetPrimeAnnuelle(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete, Double result) {
+        //Given, When, Then
+        Employe employe = new Employe("Doe", "John", matricule, LocalDate.now().minusYears(nbAnneesAnciennete), 1500d, performance, tauxActivite);
+        Assertions.assertThat(employe.getPrimeAnnuelle()).isEqualTo(result);
+    }
 }
