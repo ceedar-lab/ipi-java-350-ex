@@ -1,5 +1,6 @@
 package com.ipiecoles.java.java350.model;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,6 +9,62 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.time.LocalDate;
 
 public class EmployeTest {
+
+    /** TP **/
+
+    @ParameterizedTest(name = "Salaire : {0}, augmentation : {1} -> nouveau salaire : {2}")
+    @CsvSource({
+            "1000.0, 0.0, 1000.0",
+            "1000.0, 0.75, 1750.0",
+            "1500.0, 1.0, 3000.0",
+            "1500.0, 0.15, 1725.0",
+            "2150.0, -0.0, 2150.0",
+            "2150.0, 1.50, 5375.0"
+    })
+    public void testAugementerSalaireCasNominaux(Double ancienSalaire, Double augmentation, Double nouveauSalaire) throws EmployeException {
+        //Given, When, Then
+        Employe employe = new Employe();
+        employe.setSalaire(ancienSalaire);
+        employe.augmenterSalaire(augmentation);
+        Assertions.assertThat(employe.getSalaire()).isEqualTo(nouveauSalaire);
+    }
+
+    @ParameterizedTest(name = "Salaire : {0}, augmentation : {1} -> nouveau salaire : {2}")
+    @CsvSource({
+            "1253.25, 0.33, 1666.82",
+            "2169.75, 0.66, 3601.79",
+            "2546.1557, 0.31, 3335.46",
+            "1234.1234, 0.02, 1258.81",
+            "2046.1546, 1.0034, 4099.27",
+            "1342.1564, 0.6481, 2212.01"
+
+    })
+    public void testAugementerSalaireCasLimites(Double ancienSalaire, Double augmentation, Double nouveauSalaire) throws EmployeException {
+        //Given, When, Then
+        Employe employe = new Employe();
+        employe.setSalaire(ancienSalaire);
+        employe.augmenterSalaire(augmentation);
+        Assertions.assertThat(employe.getSalaire()).isEqualTo(nouveauSalaire);
+    }
+
+    @Test
+    public void testAugementationSalaireFail() throws EmployeException {
+        // Given
+        Employe employe = new Employe();
+        employe.setSalaire(1500d);
+        Double augmentation = -0.5;
+
+        // When
+        try {
+            employe.augmenterSalaire(augmentation);
+            Assertions.fail("La méthode augmenterSalaire() aurait dû lancer une exception");
+        } catch (EmployeException e) {
+            //Then
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le taux d'augmentation ne peut être négatif");
+        }
+    }
+
+    /** Cours **/
 
     @Test
     public void testGetAnneeAncienneteDateEmbaucheInfNow() {

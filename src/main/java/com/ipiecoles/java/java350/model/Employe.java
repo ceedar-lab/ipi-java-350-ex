@@ -1,5 +1,10 @@
 package com.ipiecoles.java.java350.model;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
+import com.ipiecoles.java.java350.service.EmployeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +16,7 @@ import java.util.Objects;
 @Entity
 public class Employe {
 
+    private static Logger logger = LoggerFactory.getLogger(EmployeService.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -139,8 +145,20 @@ public class Employe {
         return prime * this.tempsPartiel;
     }
 
-    //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    /**
+     * Permet de calculer le nouveau salaire d'un employé en fonction de son augmentation.
+     * Règle de calcul : nouveau salaire = salaire actuel * (1 + augmentation en %).
+     * Cette méthode ne calcule pas les baisses de salaire, donc entrer un pourcentage négatif en argument est interdit (renvoie une erreur).
+     * On arrondira le nouveau salaire à 2 décimales.
+     *
+     * @return
+     */
+    public void augmenterSalaire(double augmentation) throws EmployeException {
+        if (augmentation >= 0)
+            this.salaire = Math.round(this.getSalaire() * (1 + augmentation) * 100) / 100d;
+        else
+            throw new EmployeException("Le taux d'augmentation ne peut être négatif");
+    }
 
     public Long getId() {
         return id;
