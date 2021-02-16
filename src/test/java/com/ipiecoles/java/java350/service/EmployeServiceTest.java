@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityExistsException;
 import java.time.LocalDate;
-import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 class EmployeServiceTest {
     @InjectMocks
@@ -22,7 +20,7 @@ class EmployeServiceTest {
     @Mock
     private EmployeRepository employeRepository;
     @Test
-    public void testEmbauchePremierEmploye() throws EmployeException {
+    void testEmbauchePremierEmploye() throws EmployeException {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
@@ -51,7 +49,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheLimiteMatricule() {
+    void testEmbaucheLimiteMatricule() {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
@@ -72,7 +70,7 @@ class EmployeServiceTest {
     }
 
     @Test
-    public void testEmbaucheEmployeExisteDeja() throws EmployeException {
+    void testEmbaucheEmployeExisteDeja() throws EmployeException {
         //Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";

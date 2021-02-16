@@ -12,6 +12,47 @@ public class EmployeTest {
 
     /** TP **/
 
+    // Tests méthode getNbRtt()
+    @ParameterizedTest(name = "A la date du {0}/{1}/{2} avec un taux de travail de {3} = {4} jours de RTT")
+    @CsvSource({
+            "1, 1, 2016, 1.0, 9", // 2016
+            "12, 7, 2016, 1.0, 9",
+            "12, 7, 2016, 0.5, 5",
+            "1, 1, 2019, 1.0, 8", // 2019
+            "25, 10, 2019, 1.0, 8",
+            "25, 10, 2019, 0.5, 4",
+            "1, 1, 2021, 1.0, 10", // 2021
+            "12, 6, 2021, 1.0, 10",
+            "12, 6, 2021, 0.5, 5",
+            "1, 1, 2022, 1.0, 10", // 2022
+            "24, 8, 2022, 1.0, 10",
+            "24, 8, 2022, 0.5, 5",
+            "1, 1, 2025, 1.0, 8", // 2025
+            "9, 12, 2025, 1.0, 8",
+            "9, 12, 2025, 0.5, 4",
+            "1, 1, 2032, 1.0, 11", // 2032
+            "29, 2, 2032, 1.0, 11",
+            "29, 2, 2032, 0.5, 6"
+    })
+    void testGetNbRttCasNominaux(Integer day, Integer month, Integer year, Double tempsPartiel, Integer nbRtt) {
+        Employe employe = new Employe();
+        employe.setTempsPartiel(tempsPartiel);
+        Assertions.assertThat(employe.getNbRtt(LocalDate.of(year, month, day))).isEqualTo(nbRtt);
+    }
+
+    @Test
+    void testGetNbRttRightNow() {
+        // Given
+        Employe employe = new Employe();
+
+        // When
+        employe.setTempsPartiel(1d);
+
+        // Then
+        Assertions.assertThat(employe.getNbRtt()).isEqualTo(10);
+    }
+
+    // Tests méthode augmenterSalaire()
     @ParameterizedTest(name = "Salaire : {0}, augmentation : {1} -> nouveau salaire : {2}")
     @CsvSource({
             "1000.0, 0.0, 1000.0",
@@ -21,7 +62,7 @@ public class EmployeTest {
             "2150.0, -0.0, 2150.0",
             "2150.0, 1.50, 5375.0"
     })
-    public void testAugementerSalaireCasNominaux(Double ancienSalaire, Double augmentation, Double nouveauSalaire) throws EmployeException {
+    void testAugmenterSalaireCasNominaux(Double ancienSalaire, Double augmentation, Double nouveauSalaire) throws EmployeException {
         //Given, When, Then
         Employe employe = new Employe();
         employe.setSalaire(ancienSalaire);
@@ -39,7 +80,7 @@ public class EmployeTest {
             "1342.1564, 0.6481, 2212.01"
 
     })
-    public void testAugementerSalaireCasLimites(Double ancienSalaire, Double augmentation, Double nouveauSalaire) throws EmployeException {
+    void testAugmenterSalaireCasLimites(Double ancienSalaire, Double augmentation, Double nouveauSalaire) throws EmployeException {
         //Given, When, Then
         Employe employe = new Employe();
         employe.setSalaire(ancienSalaire);
@@ -48,11 +89,11 @@ public class EmployeTest {
     }
 
     @Test
-    public void testAugementationSalaireFail() throws EmployeException {
+    void testAugmentationSalaireFail() throws EmployeException {
         // Given
         Employe employe = new Employe();
         employe.setSalaire(1500d);
-        Double augmentation = -0.5;
+        Double augmentation = -0.01;
 
         // When
         try {
@@ -67,7 +108,7 @@ public class EmployeTest {
     /** Cours **/
 
     @Test
-    public void testGetAnneeAncienneteDateEmbaucheInfNow() {
+    void testGetAnneeAncienneteDateEmbaucheInfNow() {
         // Given
         Employe employe = new Employe();
         employe.setDateEmbauche(LocalDate.now().minusYears(5));
@@ -80,7 +121,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetAnneeAncienneteDateEmbaucheSuppNow() {
+    void testGetAnneeAncienneteDateEmbaucheSuppNow() {
         // Given
         Employe employe = new Employe();
         employe.setDateEmbauche(LocalDate.now().plusYears(5));
@@ -93,7 +134,7 @@ public class EmployeTest {
     }
 
     @Test
-    public void testGetNbAnneeAncienneteDateEmbaucheNull() {
+    void testGetNbAnneeAncienneteDateEmbaucheNull() {
         //Given
         Employe employe = new Employe();
         employe.setDateEmbauche(null);
@@ -117,7 +158,7 @@ public class EmployeTest {
             "2, 'M12345', 1.0, 0, 1700.0",
             "2, 'M12345', 1.0, 8, 2500.0"
     })
-    public void testGetPrimeAnnuelle(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete, Double result) {
+    void testGetPrimeAnnuelle(Integer performance, String matricule, Double tauxActivite, Long nbAnneesAnciennete, Double result) {
         //Given, When, Then
         Employe employe = new Employe("Doe", "John", matricule, LocalDate.now().minusYears(nbAnneesAnciennete), 1500d, performance, tauxActivite);
         Assertions.assertThat(employe.getPrimeAnnuelle()).isEqualTo(result);

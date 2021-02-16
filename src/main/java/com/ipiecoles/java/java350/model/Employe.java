@@ -1,9 +1,6 @@
 package com.ipiecoles.java.java350.model;
 
 import com.ipiecoles.java.java350.exception.EmployeException;
-import com.ipiecoles.java.java350.service.EmployeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +12,6 @@ import java.util.Objects;
 
 @Entity
 public class Employe {
-
-    private static Logger logger = LoggerFactory.getLogger(EmployeService.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -98,9 +93,12 @@ public class Employe {
             case SATURDAY:
                 nbSamediDimanche = nbSamediDimanche + 1;
                 break;
+            default:
+                break;
         }
         int nbJoursFeriesSemaine = (int) Entreprise.joursFeries(dateReference).stream().filter(localDate ->
                 localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
+
         return (int) Math.ceil((
                 nbJoursAnnee
                         - Entreprise.NB_JOURS_MAX_FORFAIT

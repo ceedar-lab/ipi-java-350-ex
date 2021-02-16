@@ -26,7 +26,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    public void test() {
+    void test() {
         // Given
         employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
 
@@ -38,7 +38,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
         // Given
         employeRepository.save(new Employe());
 
@@ -50,7 +50,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    public void test3() {
+    void test3() {
         // Given
         employeRepository.save(new Employe("Doe", "Jean", "C06432", LocalDate.now(), 1500d, 1, 1.0));
         employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
