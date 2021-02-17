@@ -10,7 +10,8 @@ import java.time.LocalDate;
 
 public class EmployeTest {
 
-    /** TP **/
+
+    /**********  TP  **********/
 
     // Tests méthode getNbRtt()
     @ParameterizedTest(name = "A la date du {0}/{1}/{2} avec un taux de travail de {3} = {4} jours de RTT")
@@ -38,18 +39,6 @@ public class EmployeTest {
         Employe employe = new Employe();
         employe.setTempsPartiel(tempsPartiel);
         Assertions.assertThat(employe.getNbRtt(LocalDate.of(year, month, day))).isEqualTo(nbRtt);
-    }
-
-    @Test
-    void testGetNbRttRightNow() {
-        // Given
-        Employe employe = new Employe();
-
-        // When
-        employe.setTempsPartiel(1d);
-
-        // Then
-        Assertions.assertThat(employe.getNbRtt()).isEqualTo(10);
     }
 
     // Tests méthode augmenterSalaire()
@@ -89,7 +78,7 @@ public class EmployeTest {
     }
 
     @Test
-    void testAugmentationSalaireFail() throws EmployeException {
+    void testAugmentationSalaireFail() {
         // Given
         Employe employe = new Employe();
         employe.setSalaire(1500d);
@@ -105,7 +94,31 @@ public class EmployeTest {
         }
     }
 
-    /** Cours **/
+
+    /**********  Cours  **********/
+
+    // Tests méthode equals()
+    @Test
+    void testEmployeesAreEqual() {
+        // Given, When, Then
+        Employe employe1 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
+        Employe employe2 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
+
+        Assertions.assertThat(employe1.equals(employe1)).isTrue();
+        Assertions.assertThat(employe1 instanceof Employe).isTrue();
+        Assertions.assertThat(employe1.equals(employe2)).isTrue();
+    }
+
+    @Test
+    void testEmployeesAreNotEqual() {
+        // Given, When, Then
+        Employe employe1 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
+        Employe employe2 = new Employe("Doe", "Jane", "C00001", LocalDate.now(), 1500d, 5, 1d);
+
+        Assertions.assertThat(!(employe1.equals(employe1))).isFalse();
+        Assertions.assertThat(!(employe1 instanceof Employe)).isFalse();
+        Assertions.assertThat(employe1.equals(employe2)).isFalse();
+    }
 
     @Test
     void testGetAnneeAncienneteDateEmbaucheInfNow() {

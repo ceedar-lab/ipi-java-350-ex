@@ -23,7 +23,8 @@ class EmployeServiceTest {
     @Mock
     private EmployeRepository employeRepository;
 
-    /** TP **/
+
+    /**********  TP  **********/
 
     // Tests méthode calculPerformanceCommercial()
     @ParameterizedTest(name = "CA traité : {0}, objectif : {1}, perf actuelle : {2}, perf moyenne : {3} = nouvelle perf : {4}")
@@ -60,14 +61,14 @@ class EmployeServiceTest {
 
     @ParameterizedTest(name = "Matricule : {0}, CA traité : {1}, objectif CA : {2}")
     @CsvSource({
-            "'C00001', , 10000, Le chiffre d'affaire traité ne peut être négatif ou null !", // Erreur caTraite
-            "'C00001', -10000, 10000, Le chiffre d'affaire traité ne peut être négatif ou null !",
-            "'C00001', 10000, , L\'objectif de chiffre d'affaire ne peut être négatif ou null !", // Erreur objectCa
-            "'C00001', 10000, -10000, L\'objectif de chiffre d'affaire ne peut être négatif ou null !",
+            "C00001, , 10000, Le chiffre d'affaire traité ne peut être négatif ou null !", // Erreur caTraite
+            "C00001, -10000, 10000, Le chiffre d'affaire traité ne peut être négatif ou null !",
+            "C00001, 10000, , L'objectif de chiffre d'affaire ne peut être négatif ou null !", // Erreur objectCa
+            "C00001, 10000, -10000, L'objectif de chiffre d'affaire ne peut être négatif ou null !",
             ", 10000, 10, Le matricule ne peut être null et doit commencer par un C !", // Erreur matricule
             "T00001, 10000, 10, Le matricule ne peut être null et doit commencer par un C !",
     })
-    void testCalculPerformanceCommercialFail(String matricule, Long caTraite, Long objectifCa, String errorMessage) throws EmployeException {
+    void testCalculPerformanceCommercialFail(String matricule, Long caTraite, Long objectifCa, String errorMessage) {
         // Given, When, Then
         try {
             employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
@@ -77,9 +78,24 @@ class EmployeServiceTest {
         }
     }
 
+    @Test
+    void testCalculPerformanceCommercialQuiNexistePas() {
+        // Given, When, Then
+        String matricule = "C00001";
+        Long caTraite = 10000L;
+        Long objectifCa = 10000L;
+        Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(null);
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("La méthode calculPerformanceCommercial() aurait dû lancer une exception.");
+        } catch (EmployeException e) {
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le matricule " + matricule + " n'existe pas !");
+        }
+    }
 
 
-    /** Cours **/
+    /************ Cours ************/
+
     @Test
     void testEmbauchePremierEmploye() throws EmployeException {
         //Given Pas d'employés en base
@@ -153,5 +169,4 @@ class EmployeServiceTest {
             Assertions.assertThat(e.getMessage()).isEqualTo("L'employé de matricule T00001 existe déjà en BDD");
         }
     }
-
 }
