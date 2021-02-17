@@ -7,6 +7,8 @@ import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -15,10 +17,69 @@ import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeServiceTest {
+
     @InjectMocks
     private EmployeService employeService;
     @Mock
     private EmployeRepository employeRepository;
+
+    /** TP **/
+
+    // Tests méthode calculPerformanceCommercial()
+    @ParameterizedTest(name = "CA traité : {0}, objectif : {1}, perf actuelle : {2}, perf moyenne : {3} = nouvelle perf : {4}")
+    @CsvSource({
+            "1000, 10000, 10, 5.0, 1", // Performance de base
+            "8000, 10000, 2, 5.0, 1", // Performance minimale
+            "8000, 10000, 5, 15.0, 3", // Cas 2 && <= moyenne
+            "9500, 10000, 5, 15.0, 5", // Cas 3 && <= moyenne
+            "12000, 10000, 5, 15.0, 6", // Cas 4 && <= moyenne
+            "70000, 10000, 5, 15.0, 9", // Cas 5 && <= moyenne
+            "9400, 10000, 10, 5.0, 9", // Cas 2 && > moyenne
+            "10500, 10000, 10, 5.0, 11", // Cas 3 && > moyenne
+            "10550, 10000, 10, 5.0, 12", // Cas 4 && > moyenne
+            "50000, 10000, 10, 5.0, 15" // Cas 5 && > moyenne
+    })
+    void testCalculPerformanceCommercial(Long caTraite, Long objectifCa, Integer performanceActuelle, Double performanceMoyenne, Integer nouvellePerformance) throws EmployeException {
+        // Given
+        String matricule = "C00001";
+        Mockito.when(employeRepository.findByMatricule(matricule)).thenReturn(new Employe(
+                "Doe", "John", matricule, LocalDate.now(), 1500d, performanceActuelle, 1d)
+        );
+        Mockito.when(employeRepository.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(performanceMoyenne);
+
+        // When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        // Then
+        ArgumentCaptor<Employe> employeArgumentCaptor = ArgumentCaptor.forClass(Employe.class);
+        Mockito.verify(employeRepository).save(employeArgumentCaptor.capture());
+        Employe employe = employeArgumentCaptor.getValue();
+
+        Assertions.assertThat(employe.getPerformance()).isEqualTo(nouvellePerformance);
+    }
+
+    @ParameterizedTest(name = "Matricule : {0}, CA traité : {1}, objectif CA : {2}")
+    @CsvSource({
+            "'C00001', , 10000, Le chiffre d'affaire traité ne peut être négatif ou null !", // Erreur caTraite
+            "'C00001', -10000, 10000, Le chiffre d'affaire traité ne peut être négatif ou null !",
+            "'C00001', 10000, , L\'objectif de chiffre d'affaire ne peut être négatif ou null !", // Erreur objectCa
+            "'C00001', 10000, -10000, L\'objectif de chiffre d'affaire ne peut être négatif ou null !",
+            ", 10000, 10, Le matricule ne peut être null et doit commencer par un C !", // Erreur matricule
+            "T00001, 10000, 10, Le matricule ne peut être null et doit commencer par un C !",
+    })
+    void testCalculPerformanceCommercialFail(String matricule, Long caTraite, Long objectifCa, String errorMessage) throws EmployeException {
+        // Given, When, Then
+        try {
+            employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+            Assertions.fail("La méthode calculPerformanceCommercial() aurait dû lancer une exception.");
+        } catch (EmployeException e) {
+            Assertions.assertThat(e.getMessage()).isEqualTo(errorMessage);
+        }
+    }
+
+
+
+    /** Cours **/
     @Test
     void testEmbauchePremierEmploye() throws EmployeException {
         //Given Pas d'employés en base
