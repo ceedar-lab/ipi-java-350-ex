@@ -104,9 +104,8 @@ public class EmployeTest {
         Employe employe1 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
         Employe employe2 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
 
-        Assertions.assertThat(employe1.equals(employe1)).isTrue();
-        Assertions.assertThat(employe1 instanceof Employe).isTrue();
-        Assertions.assertThat(employe1.equals(employe2)).isTrue();
+        Assertions.assertThat(employe1).isInstanceOf(Employe.class);
+        Assertions.assertThat(employe1).isEqualTo(employe2);
     }
 
     @Test
@@ -115,9 +114,7 @@ public class EmployeTest {
         Employe employe1 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
         Employe employe2 = new Employe("Doe", "Jane", "C00001", LocalDate.now(), 1500d, 5, 1d);
 
-        Assertions.assertThat(!(employe1.equals(employe1))).isFalse();
-        Assertions.assertThat(!(employe1 instanceof Employe)).isFalse();
-        Assertions.assertThat(employe1.equals(employe2)).isFalse();
+        Assertions.assertThat(employe1).isNotEqualTo(employe2);
     }
 
     @Test
