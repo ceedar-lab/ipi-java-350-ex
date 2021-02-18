@@ -16,22 +16,22 @@ public class EmployeTest {
     // Tests méthode getNbRtt()
     @ParameterizedTest(name = "A la date du {0}/{1}/{2} avec un taux de travail de {3} = {4} jours de RTT")
     @CsvSource({
-            "1, 1, 2016, 1.0, 9", // 2016
+            "1, 1, 2016, 1.0, 9", // 2016 - Cas 2
             "12, 7, 2016, 1.0, 9",
             "12, 7, 2016, 0.5, 5",
-            "1, 1, 2019, 1.0, 8", // 2019
+            "1, 1, 2019, 1.0, 8", // 2019 - Cas 5
             "25, 10, 2019, 1.0, 8",
             "25, 10, 2019, 0.5, 4",
-            "1, 1, 2021, 1.0, 10", // 2021
+            "1, 1, 2021, 1.0, 10", // 2021 - Cas 3
             "12, 6, 2021, 1.0, 10",
             "12, 6, 2021, 0.5, 5",
-            "1, 1, 2022, 1.0, 10", // 2022
+            "1, 1, 2022, 1.0, 10", // 2022 - Cas 4
             "24, 8, 2022, 1.0, 10",
             "24, 8, 2022, 0.5, 5",
-            "1, 1, 2025, 1.0, 8", // 2025
+            "1, 1, 2025, 1.0, 8", // 2025 - Cas 5
             "9, 12, 2025, 1.0, 8",
             "9, 12, 2025, 0.5, 4",
-            "1, 1, 2032, 1.0, 11", // 2032
+            "1, 1, 2032, 1.0, 11", // 2032 - Cas 1
             "29, 2, 2032, 1.0, 11",
             "29, 2, 2032, 0.5, 6"
     })
@@ -78,7 +78,7 @@ public class EmployeTest {
     }
 
     @Test
-    void testAugmentationSalaireFail() {
+    void testAugmenterSalaireFail() {
         // Given
         Employe employe = new Employe();
         employe.setSalaire(1500d);
@@ -104,8 +104,9 @@ public class EmployeTest {
         Employe employe1 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
         Employe employe2 = new Employe("Doe", "John", "C00001", LocalDate.now(), 1500d, 5, 1d);
 
-        Assertions.assertThat(employe1).isInstanceOf(Employe.class);
-        Assertions.assertThat(employe1).isEqualTo(employe2);
+        Assertions.assertThat(employe1)
+                .isInstanceOf(Employe.class)
+                .isEqualTo(employe2);
     }
 
     @Test

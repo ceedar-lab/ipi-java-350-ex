@@ -30,15 +30,15 @@ class EmployeServiceTest {
     @ParameterizedTest(name = "CA traité : {0}, objectif : {1}, perf actuelle : {2}, perf moyenne : {3} = nouvelle perf : {4}")
     @CsvSource({
             "1000, 10000, 10, 5.0, 1", // Performance de base
-            "8000, 10000, 2, 5.0, 1", // Performance minimale
-            "8000, 10000, 5, 15.0, 3", // Cas 2 && <= moyenne
-            "9500, 10000, 5, 15.0, 5", // Cas 3 && <= moyenne
-            "12000, 10000, 5, 15.0, 6", // Cas 4 && <= moyenne
-            "70000, 10000, 5, 15.0, 9", // Cas 5 && <= moyenne
-            "9400, 10000, 10, 5.0, 9", // Cas 2 && > moyenne
-            "10500, 10000, 10, 5.0, 11", // Cas 3 && > moyenne
-            "10550, 10000, 10, 5.0, 12", // Cas 4 && > moyenne
-            "50000, 10000, 10, 5.0, 15" // Cas 5 && > moyenne
+            "8000, 10000, 2, 5.0, 1", // Performance minimale (cas nouvelle perf = 0)
+            "8000, 10000, 5, 15.0, 3", // Cas 2 <= moyenne
+            "9500, 10000, 5, 15.0, 5", // Cas 3 <= moyenne
+            "12000, 10000, 5, 15.0, 6", // Cas 4 <= moyenne
+            "70000, 10000, 5, 15.0, 9", // Cas 5 <= moyenne
+            "9400, 10000, 10, 5.0, 9", // Cas 2 > moyenne
+            "10500, 10000, 10, 5.0, 11", // Cas 3 > moyenne
+            "10550, 10000, 10, 5.0, 12", // Cas 4 > moyenne
+            "50000, 10000, 10, 5.0, 15" // Cas 5 > moyenne
     })
     void testCalculPerformanceCommercial(Long caTraite, Long objectifCa, Integer performanceActuelle, Double performanceMoyenne, Integer nouvellePerformance) throws EmployeException {
         // Given

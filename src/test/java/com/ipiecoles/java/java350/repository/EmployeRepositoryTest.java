@@ -48,9 +48,7 @@ class EmployeRepositoryTest {
         employeList.add(new Employe("Doe", "John", "C00013", LocalDate.now(), 1500d, 8, 1d));
         employeList.add(new Employe("Doe", "John", "C00014", LocalDate.now(), 1500d, 11, 1d));
         employeList.add(new Employe("Doe", "John", "T00015", LocalDate.now(), 1500d, 8, 1d));
-        for (Employe e : employeList) {
-            employeRepository.save(e);
-        }
+        for (Employe e : employeList) employeRepository.save(e);
 
         // When
         Double perfManagers = employeRepository.avgPerformanceWhereMatriculeStartsWith("M");

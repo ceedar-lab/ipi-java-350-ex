@@ -82,19 +82,19 @@ public class Employe {
         switch (LocalDate.of(dateReference.getYear(), 1, 1).getDayOfWeek()) {
             case THURSDAY:
                 if (dateReference.isLeapYear())
-                    nbSamediDimanche = nbSamediDimanche + 1;
+                    nbSamediDimanche = nbSamediDimanche + 1; // Cas 1
                 break;
             case FRIDAY:
                 if (dateReference.isLeapYear())
-                    nbSamediDimanche = nbSamediDimanche + 2;
+                    nbSamediDimanche = nbSamediDimanche + 2; // Cas 2
                 else
-                    nbSamediDimanche = nbSamediDimanche + 1;
+                    nbSamediDimanche = nbSamediDimanche + 1; // Cas 3
                 break;
             case SATURDAY:
-                nbSamediDimanche = nbSamediDimanche + 1;
+                nbSamediDimanche = nbSamediDimanche + 1; // Cas 4
                 break;
             default:
-                break;
+                break; // Cas 5
         }
         int nbJoursFeriesSemaine = (int) Entreprise.joursFeries(dateReference).stream().filter(localDate ->
                 localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
