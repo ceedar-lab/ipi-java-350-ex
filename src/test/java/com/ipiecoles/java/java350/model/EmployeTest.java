@@ -18,22 +18,19 @@ public class EmployeTest {
     @CsvSource({
             "1, 1, 2016, 1.0, 9", // 2016 - Cas 2
             "12, 7, 2016, 1.0, 9",
-            "12, 7, 2016, 0.5, 5",
-            "1, 1, 2019, 1.0, 8", // 2019 - Cas 5
-            "25, 10, 2019, 1.0, 8",
-            "25, 10, 2019, 0.5, 4",
+            "25, 10, 2016, 0.5, 5",
             "1, 1, 2021, 1.0, 10", // 2021 - Cas 3
             "12, 6, 2021, 1.0, 10",
-            "12, 6, 2021, 0.5, 5",
+            "17, 9, 2021, 0.5, 5",
             "1, 1, 2022, 1.0, 10", // 2022 - Cas 4
             "24, 8, 2022, 1.0, 10",
-            "24, 8, 2022, 0.5, 5",
+            "12, 4, 2022, 0.5, 5",
             "1, 1, 2025, 1.0, 8", // 2025 - Cas 5
             "9, 12, 2025, 1.0, 8",
-            "9, 12, 2025, 0.5, 4",
+            "27, 7, 2025, 0.5, 4",
             "1, 1, 2032, 1.0, 11", // 2032 - Cas 1
             "29, 2, 2032, 1.0, 11",
-            "29, 2, 2032, 0.5, 6"
+            "9, 11, 2032, 0.5, 6"
     })
     void testGetNbRttCasNominaux(Integer day, Integer month, Integer year, Double tempsPartiel, Integer nbRtt) {
         Employe employe = new Employe();
@@ -78,7 +75,7 @@ public class EmployeTest {
     }
 
     @Test
-    void testAugmenterSalaireFail() {
+    void testAugmenterSalaireFailCauseNegative() {
         // Given
         Employe employe = new Employe();
         employe.setSalaire(1500d);
@@ -91,6 +88,23 @@ public class EmployeTest {
         } catch (EmployeException e) {
             //Then
             Assertions.assertThat(e.getMessage()).isEqualTo("Le taux d'augmentation ne peut être négatif");
+        }
+    }
+
+    @Test
+    void testAugmenterSalaireFailCauseNull() {
+        // Given
+        Employe employe = new Employe();
+        employe.setSalaire(1500d);
+        Double augmentation = null;
+
+        // When
+        try {
+            employe.augmenterSalaire(augmentation);
+            Assertions.fail("La méthode augmenterSalaire() aurait dû lancer une exception");
+        } catch (EmployeException e) {
+            //Then
+            Assertions.assertThat(e.getMessage()).isEqualTo("Le taux d'augmentation ne peut être null");
         }
     }
 

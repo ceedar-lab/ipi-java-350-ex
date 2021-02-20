@@ -149,13 +149,16 @@ public class Employe {
      * Cette méthode ne calcule pas les baisses de salaire, donc entrer un pourcentage négatif en argument est interdit (renvoie une erreur).
      * On arrondira le nouveau salaire à 2 décimales.
      *
-     * @return
+     * @param augmentation si 10% d'augmentation, passer 0.1 en paramètre.
+     * @throws EmployeException si augmentation null ou négative.
      */
-    public void augmenterSalaire(double augmentation) throws EmployeException {
-        if (augmentation >= 0)
-            this.salaire = Math.round(this.getSalaire() * (1 + augmentation) * 100) / 100d;
-        else
+    public void augmenterSalaire(Double augmentation) throws EmployeException {
+        if (augmentation == null)
+            throw new EmployeException("Le taux d'augmentation ne peut être null");
+        else if (augmentation < 0)
             throw new EmployeException("Le taux d'augmentation ne peut être négatif");
+        else
+            this.salaire = Math.round(this.getSalaire() * (1 + augmentation) * 100) / 100d;
     }
 
     public Long getId() {

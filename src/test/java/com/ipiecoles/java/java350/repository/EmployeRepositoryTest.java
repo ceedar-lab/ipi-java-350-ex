@@ -65,7 +65,7 @@ class EmployeRepositoryTest {
     /**********  Cours  **********/
 
     @Test
-    void test() {
+    void testFindLastMatricule() {
         // Given
         employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
 
@@ -77,7 +77,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    void test2() {
+    void testFindLastMatriculeIsNull() {
         // Given
         employeRepository.save(new Employe());
 
@@ -89,7 +89,7 @@ class EmployeRepositoryTest {
     }
 
     @Test
-    void test3() {
+    void testFindLastMatriculeWithPlusieursEmployes() {
         // Given
         employeRepository.save(new Employe("Doe", "Jean", "C06432", LocalDate.now(), 1500d, 1, 1.0));
         employeRepository.save(new Employe("Doe", "John", "T12345", LocalDate.now(), 1500d, 1, 1.0));
