@@ -6,6 +6,8 @@ import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,23 +19,69 @@ class EmployeServiceIntegrationTest {
 
     @Autowired
     private EmployeService employeService;
-
     @Autowired
     private EmployeRepository employeRepository;
 
+    @BeforeEach
+    @AfterEach
+    public void purge(){
+        employeRepository.deleteAll();
+    }
+
+
+    /**********  TP  **********/
+
+    // Test méthode calculPerformanceCommercial()
     @Test
-    public void testEmbauchePremierEmploye() throws EmployeException {
-        //Given Pas d'employés en base
+    void testCalculPerformanceCommercialSuppMoyenne() throws EmployeException {
+        // Given
+        String matricule = "C00001";
+        Employe employe = new Employe("Doe", "John", matricule, LocalDate.now(), 1500d, 10, 1d);
+        employeRepository.save(employe);
+        Long caTraite = 50000L;
+        Long objectifCa = 10000L;
+
+        // When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        // Then
+        Assertions.assertThat(employeRepository.findByMatricule(matricule).getPerformance()).isEqualTo(15);
+    }
+
+    @Test
+    void testCalculPerformanceCommercialInfMoyenne() throws EmployeException {
+        // Given
+        String matricule = "C00001";
+        Employe employe = new Employe("Doe", "John", matricule, LocalDate.now(), 1500d, 10, 1d);
+        Employe employe2 = new Employe("Doe", "Jane", "C00002", LocalDate.now(), 1500d, 50, 1d);
+        employeRepository.save(employe);
+        employeRepository.save(employe2);
+        Long caTraite = 50000L;
+        Long objectifCa = 10000L;
+
+        // When
+        employeService.calculPerformanceCommercial(matricule, caTraite, objectifCa);
+
+        // Then
+        Assertions.assertThat(employeRepository.findByMatricule(matricule).getPerformance()).isEqualTo(14);
+    }
+
+
+    /**********  Cours  **********/
+
+    @Test
+    void testEmbauchePremierEmploye() throws EmployeException {
+        // Given Pas d'employés en base
         String nom = "Doe";
         String prenom = "John";
         Poste poste = Poste.TECHNICIEN;
         NiveauEtude niveauEtude = NiveauEtude.BTS_IUT;
         Double tempsPartiel = 1.0;
 
-        //When
+        // When
         employeService.embaucheEmploye(nom, prenom, poste, niveauEtude, tempsPartiel);
         
-        //Then
+        // Then
         Employe employe = employeRepository.findByMatricule("T00001");
         Assertions.assertThat(employe).isNotNull();
         Assertions.assertThat(employe.getNom()).isEqualTo(nom);
